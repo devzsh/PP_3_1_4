@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,14 +19,16 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-    @PersistenceContext
-    private EntityManager em;
-    @Autowired
-    UserRepository userDAO;
-    @Autowired
-    RoleRepository roleDAO;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final UserRepository userDAO;
+    private final RoleRepository roleDAO;
+
+    public UserService(BCryptPasswordEncoder bCryptPasswordEncoder, UserRepository userDAO, RoleRepository roleDAO) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.userDAO = userDAO;
+        this.roleDAO = roleDAO;
+    }
 
 
 
@@ -50,6 +53,7 @@ public class UserService implements UserDetailsService {
         return userDAO.findAll();
     }
 
+    @Transactional
     public boolean addUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDAO.save(user);
@@ -57,12 +61,14 @@ public class UserService implements UserDetailsService {
     }
 
 
+    @Transactional
     public boolean saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDAO.save(user);
         return true;
     }
 
+    @Transactional
     public boolean deleteUser(Long userId) {
         if (userDAO.findById(userId).isPresent()) {
             userDAO.deleteById(userId);

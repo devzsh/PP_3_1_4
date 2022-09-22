@@ -16,13 +16,13 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 public class UsersController {
 
 
-    @Autowired
-    UserRepository userRepository;
+    private  final UserRepository userRepository;
     private final UserService userService;
 
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
 
