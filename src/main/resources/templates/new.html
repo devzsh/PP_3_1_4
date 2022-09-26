@@ -55,7 +55,7 @@
                                   method="POST">
                                 <label for="name"><b>Name</b></label>
                                 <input th:name="name" th:field="*{username}" th:type="text" class="form-control" id="name" required/>
-
+                                <div style="color: red" class="col-sm-10" th:if="${#fields.hasErrors('username')}" th:errors="*{username}" ></div>
                                 <br>
                                 <label for="surname"><b>Surname</b></label>
                                 <input th:name="surname" th:field="*{lastName}" th:type="text" class="form-control" id="surname" required/>

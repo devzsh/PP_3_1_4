@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,13 +24,23 @@ public class RegController {
 
     @GetMapping("/registration")
     public String registration (@ModelAttribute("user") User user) {
+
         return "registration";
     }
 
-    @PostMapping("/registration")
-    public String newUser (@ModelAttribute("user") User user) {
 
-        userService.saveUser(user);
+
+
+
+    @PostMapping("/registration")
+    public String newUser (@ModelAttribute("user") User user, BindingResult bindingResult) {
+
+        userService.saveUser(user, bindingResult);
+        if (bindingResult.hasErrors()) {
+
+            return "/registration";
+        }
+
         return "redirect:/login";
     }
 

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
 import ru.kata.spring.boot_security.demo.dao.RoleRepository;
 import ru.kata.spring.boot_security.demo.dao.UserRepository;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -55,17 +56,30 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public boolean addUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userDAO.save(user);
-        return true;
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userDAO.save(user);
+            return true;
+
+
     }
 
 
     @Transactional
-    public boolean saveUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userDAO.save(user);
-        return true;
+    public boolean saveUser(User user, Errors err) {
+
+
+
+        if (userDAO.findByUsername(user.getUsername()) == null) {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userDAO.save(user);
+            return true;
+        } else {
+            err.rejectValue("username", "", "User already exists");
+            //throw new NonUniqueResultException("Пользователь с таким логином уже существует!");
+            return false;
+        }
+
+
     }
 
     @Transactional

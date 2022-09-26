@@ -19,6 +19,7 @@
         <div class="form-group row mx-auto" style="width: 200px;">
             <label for="inputFirstname" class="col-sm-2 col-form-label">Firstname</label>
             <input  type="text" class="form-control" id="inputFirstname" placeholder="Firstname" th:field="*{username}" >
+            <div style="color: red" class="col-sm-10" th:if="${#fields.hasErrors('username')}" th:errors="*{username}" >
 
         </div>
 

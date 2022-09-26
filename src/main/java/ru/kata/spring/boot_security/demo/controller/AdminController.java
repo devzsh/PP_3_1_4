@@ -4,6 +4,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -35,14 +36,19 @@ public class AdminController {
 
 
     @GetMapping("/new")
-    public String newPerson(Model model) {
-        model.addAttribute("user", new User());
+    public String newPerson(@ModelAttribute("user") User user) {
+
         return "new";
     }
 
     @PostMapping("/new")
-    public String create(@ModelAttribute("user") User user) {
-        userService.addUser(user);
+    public String create(@ModelAttribute("user") User user, BindingResult bindingResult) {
+
+        userService.saveUser(user, bindingResult);
+        if (bindingResult.hasErrors()) {
+
+            return "/new";
+        }
         return "redirect:/admin";
     }
 
@@ -53,8 +59,10 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}/edit")
-    public String update (@ModelAttribute("user") User user, @PathVariable("id") Long id) {
-        userService.saveUser(user);
+    public String update (@ModelAttribute("user") User user, @PathVariable("id") Long id)  {
+
+        userService.addUser(user);
+
         return "redirect:/admin";
     }
 
