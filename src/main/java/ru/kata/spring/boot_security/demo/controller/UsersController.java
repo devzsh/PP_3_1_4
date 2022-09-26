@@ -3,8 +3,10 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.dao.UserRepository;
@@ -26,11 +28,9 @@ public class UsersController {
     }
 
 
-    @GetMapping()
-    public String showUserInfo(ModelMap model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsername(auth.getName());
-        model.addAttribute("username", "Name " + user.getUsername()  + " Surname " + user.getLastName());
+    @GetMapping("")
+    public String showUserInfo(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
         return "user";
     }
 

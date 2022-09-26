@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +20,9 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String index (Model model) {
+    public String index (@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("users", userService.allUsers());
+        model.addAttribute("user", user);
         return "show";
     }
 
@@ -38,7 +40,7 @@ public class AdminController {
         return "new";
     }
 
-    @PostMapping()
+    @PostMapping("/new")
     public String create(@ModelAttribute("user") User user) {
         userService.addUser(user);
         return "redirect:/admin";
@@ -50,7 +52,7 @@ public class AdminController {
         return "edit";
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/edit")
     public String update (@ModelAttribute("user") User user, @PathVariable("id") Long id) {
         userService.saveUser(user);
         return "redirect:/admin";
