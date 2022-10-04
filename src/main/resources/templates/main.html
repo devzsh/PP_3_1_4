@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="EN">
 <head>
@@ -17,10 +18,17 @@
         .row {
             position: absolute;
             width: 100%;
-            left: 0;
+            left: 10px;
             padding-right: 10px;
         }
 
+
+        .col-10 {
+            padding-top: 20px;
+            padding-left: 40px;
+
+
+        }
         .list-group-item{
             text-align: left;
         }
@@ -61,18 +69,26 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-2">
-                <ul class="list-group list-group-flush">
-                    <li>
-                        <a sec:authorize="hasRole('ROLE_ADMIN')"  class="list-group-item" id="adminTab"
-                           href="#adminTable" data-toggle="tab">Admin</a>
-                    </li>
-                    <li>
-                        <a class="list-group-item" id="userTab"
-                           href="#userTable" data-toggle="tab">User</a>
-                    </li>
-                </ul>
+            <div class="p-0 col-2">
+                <div class="nav flex-column nav-pills pt-4 " id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="adminTab" href="#adminTable" sec:authorize="hasAuthority('ADMIN')"
+                       aria-controls="v-pills-home" aria-selected="true"  data-toggle="tab">Admin</a>
+                    <a class="nav-link" id="userTab" href="#userTable" sec:authorize="(hasAnyAuthority('ADMIN', 'USER'))"
+                       aria-controls="v-pills-profile" aria-selected="false" data-toggle="tab">User</a>
+                </div>
             </div>
+<!--            <div class="col-2">-->
+<!--                <ul class="list-group list-group-flush">-->
+<!--                    <li>-->
+<!--                        <a sec:authorize="hasRole('ROLE_ADMIN')"  class="list-group-item" id="adminTab"-->
+<!--                           href="#adminTable" data-toggle="tab">Admin</a>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <a class="list-group-item" id="userTab"-->
+<!--                           href="#userTable" data-toggle="tab">User</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
             <div class="col-10">
                 <h1 className="h1 a1" id="h1a1"></h1>
                 <div class="tabs">
@@ -87,16 +103,16 @@
                 </div>
                 <div class="tab-content border">
                     <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="tab-pane fade" id="adminTable">
-                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                            <div class="navbar-brand">All users</div>
+                        <nav class="navbar navbar-expand-lg navbar-light border">
+                            <div class="navbar-brand " ><h4>All users</h4></div>
                         </nav>
-                        <div>
+                        <div class="card-body" bg-primary text-white>
                             <table class="table table-striped" id="tableAllUsers">
                                 <thead>
                                 <tr>
-                                    <th>UserId</th>
-                                    <th>Username</th>
-                                    <th>Surname</th>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
                                     <th>Age</th>
                                     <th>Email</th>
                                     <th>Role</th>
@@ -113,13 +129,13 @@
                         <nav class="navbar navbar-expand-lg navbar-light bg-light">
                             <div class="navbar-brand">About user</div>
                         </nav>
-                        <div>
+                        <div class="card-body" bg-primary text-white>
                             <table class="table table-striped" id="tableUser" >
                                 <thead>
                                 <tr>
-                                    <th>UserId</th>
-                                    <th>Username</th>
-                                    <th>Surname</th>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
                                     <th>Age</th>
                                     <th>Email</th>
                                     <th>Role</th>
